@@ -1,0 +1,24 @@
+/**
+ * @param {number[]} height
+ * @return {number}
+ */
+
+const maxArea = (height) => {
+    let [left, right, max] = [0, height.length - 1, 0];
+
+    while (left < right) {
+        const containerHeight = Math.min(height[left], height[right]);
+        const containerWidth = right - left;
+        const area = containerWidth * containerHeight;
+
+        max = Math.max(max, area);
+
+        if (height[left] < height[right]) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+
+    return max;
+};
