@@ -1,0 +1,47 @@
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number} k
+ * @return {ListNode}
+ */
+var reverseKGroup = function (head, k) {
+    const sentinel = new ListNode(0);
+    sentinel.next = head;
+
+    let current = sentinel;
+    let stack = [];
+
+    while (true) {
+        let count = k;
+        let pointer = current.next;
+
+        while (count > 0 && pointer !== null) {
+            stack.push(pointer);
+            pointer = pointer.next;
+            count--;
+        }
+
+        if (count > 0) {
+            break;
+        }
+
+        while (stack.length > 0) {
+            current.next = stack.pop();
+            current = current.next;
+        }
+
+        current.next = pointer;
+
+        if (pointer === null) {
+            break;
+        }
+    }
+
+    return sentinel.next;
+};
