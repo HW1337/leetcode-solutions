@@ -1,0 +1,29 @@
+/**
+ * @param {number} dividend
+ * @param {number} divisor
+ * @return {number}
+ */
+var divide = function(dividend, divisor) {
+  let did = Math.abs(dividend);
+  const dis = Math.abs(divisor);
+  const sign = (divisor > 0 && dividend > 0) || (divisor < 0 && dividend < 0);
+  let res = 0;
+  let powersOfTwo = [dis];
+
+  if (dividend === 0 || did < dis) return 0;
+  if (divisor === -1 && dividend === -2147483648) return 2147483647;
+  if (dis === 1) return divisor > 0 ? dividend : -dividend;
+
+  while (powersOfTwo[powersOfTwo.length - 1] < did) {
+    powersOfTwo.push(powersOfTwo[powersOfTwo.length - 1] + powersOfTwo[powersOfTwo.length - 1]);
+  }
+
+  for (let i = powersOfTwo.length - 1; i >= 0; i--) {
+    if (did >= powersOfTwo[i]) {
+      did -= powersOfTwo[i];
+      res += i === 0 ? 1 : 2 << (i - 1);
+    }
+  }
+
+  return sign ? res : -res;
+};
