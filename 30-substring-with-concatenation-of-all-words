@@ -1,0 +1,63 @@
+/**
+ * @param {string} s
+ * @param {string[]} words
+ * @return {number[]}
+ */
+function findSubstring(s, words) {
+    if (!s || words.length === 0) {
+        return [];
+    }
+
+    const wordLength = words[0].length;
+    const wordCount = words.length;
+    const totalLength = wordLength * wordCount;
+    const result = [];
+
+    const wordMap = {};
+
+    for (const word of words) {
+        if (wordMap[word]) {
+            wordMap[word]++;
+        } else {
+            wordMap[word] = 1;
+        }
+    }
+
+    for (let i = 0; i <= s.length - totalLength; i++) {
+        const substring = s.substr(i, totalLength);
+        const substringMap = {};
+
+        for (let j = 0; j < totalLength; j += wordLength) {
+            const word = substring.substr(j, wordLength);
+
+            if (substringMap[word]) {
+                substringMap[word]++;
+            } else {
+                substringMap[word] = 1;
+            }
+        }
+
+        if (isEqualMaps(wordMap, substringMap)) {
+            result.push(i);
+        }
+    }
+
+    return result;
+}
+
+function isEqualMaps(map1, map2) {
+    const keys1 = Object.keys(map1);
+    const keys2 = Object.keys(map2);
+
+    if (keys1.length !== keys2.length) {
+        return false;
+    }
+
+    for (const key of keys1) {
+        if (map1[key] !== map2[key]) {
+            return false;
+        }
+    }
+
+    return true;
+}
