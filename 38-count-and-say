@@ -1,0 +1,24 @@
+/**
+* @param {number} n
+ * @return {string}
+ */
+var countAndSay = function(n) {
+    if (n === 1) {
+        return "1";
+    }
+    
+    var prevResult = countAndSay(n - 1);
+    var result = "";
+    var count = 1;
+    
+    for (var i = 0; i < prevResult.length; i++) {
+        if (prevResult[i] === prevResult[i + 1]) {
+            count++;
+        } else {
+            result += count + prevResult[i];
+            count = 1;
+        }
+    }
+    
+    return result;
+};
