@@ -1,0 +1,63 @@
+/**
+ * @param {character[][]} board
+ * @return {void}
+ */
+var solveSudoku = function(board) {
+  solve(board);
+};
+
+var solve = function(board) {
+  const emptyCell = findEmptyCell(board);
+  
+  if (!emptyCell) {
+    return true;
+  }
+
+  const [row, col] = emptyCell;
+
+  for (let num = 1; num <= 9; num++) {
+    const numStr = num.toString();
+    if (isValid(board, row, col, numStr)) {
+      board[row][col] = numStr;
+
+      if (solve(board)) {
+        return true;
+      } else {
+        board[row][col] = '.';
+      }
+    }
+  }
+
+  return false;
+};
+
+var isValid = function(board, row, col, num) {
+  for (let i = 0; i < 9; i++) {
+    if (board[row][i] === num || board[i][col] === num) {
+      return false;
+    }
+  }
+
+  const blockStartRow = Math.floor(row / 3) * 3;
+  const blockStartCol = Math.floor(col / 3) * 3;
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (board[blockStartRow + i][blockStartCol + j] === num) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+};
+
+var findEmptyCell = function(board) {
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      if (board[i][j] === '.') {
+        return [i, j];
+      }
+    }
+  }
+  return null;
+};
