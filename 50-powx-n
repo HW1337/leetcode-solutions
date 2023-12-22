@@ -1,0 +1,24 @@
+/**
+ * @param {number} x
+ * @param {number} n
+ * @return {number}
+ */
+var myPow = (x, n) => {
+    if (n < 0) {
+        x = 1 / x;
+        n = -n;
+    }
+
+    let result = 1;
+    let base = x;
+
+    while (n > 0) {
+        if (n % 2 === 1) {
+            result *= base;
+        }
+        base *= base;
+        n = Math.floor(n / 2);
+    }
+
+    return result;
+}
