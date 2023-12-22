@@ -1,0 +1,22 @@
+/**
+ * @param {number[][]} matrix
+ * @return {void}
+ */
+var rotate = (matrix) => {
+    reverse(matrix);  
+    transpose(matrix);
+};
+
+var reverse = (matrix) => matrix.reverse();
+
+var transpose = (matrix) => {
+    const rows = matrix.length;
+
+    for (let row = 0; (row < rows); row++) {
+        for (let col = 0; (col < row); col++) {
+            swap(matrix, row, col);
+        }
+    }
+}
+
+var swap = (matrix, row, col) => [matrix[row][col], matrix[col][row]] = [matrix[col][row], matrix[row][col]];
