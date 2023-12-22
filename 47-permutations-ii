@@ -1,0 +1,30 @@
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var permuteUnique = function(nums) {
+    const result = [];
+    
+    const backtrack = (currentPermutation, remainingNumbers) => {
+        if (remainingNumbers.length === 0) {
+            result.push([...currentPermutation]);
+            return;
+        }
+        
+        for (let i = 0; i < remainingNumbers.length; i++) {
+            if (i > 0 && remainingNumbers[i] === remainingNumbers[i - 1]) {
+                continue; 
+            }
+            
+            const newPermutation = currentPermutation.concat(remainingNumbers[i]);
+            const newRemaining = remainingNumbers.slice(0, i).concat(remainingNumbers.slice(i + 1));
+            
+            backtrack(newPermutation, newRemaining);
+        }
+    };
+    
+    nums.sort((a, b) => a - b);
+    backtrack([], nums);
+    
+    return result;
+};
