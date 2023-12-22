@@ -1,0 +1,25 @@
+/**
+ * @param {string[]} words
+ * @return {string[][]}
+ */
+var groupAnagrams = function(words) {
+    if (!words.length) return [];
+
+    const groups = new Map();
+
+    for (const word of words) {
+        const sortedWord = sortWord(word); 
+
+        if (!groups.has(sortedWord)) {
+            groups.set(sortedWord, []);
+        }
+
+        groups.get(sortedWord).push(word); 
+    }
+
+    return Array.from(groups.values());   
+};
+
+const sortWord = function(word) {
+    return word.split('').sort().join('');
+};
