@@ -1,0 +1,42 @@
+/**
+ * @param {number[][]} matrix
+ * @return {number[]}
+ */
+var spiralOrder = function(matrix) {
+    const order = [];
+
+    if (!matrix || matrix.length === 0 || matrix[0].length === 0) {
+        return order;
+    }
+
+    let [top, bottom, left, right] = [0, matrix.length - 1, 0, matrix[0].length - 1];
+
+    while (top <= bottom && left <= right) {
+
+        for (let i = left; i <= right; i++) {
+            order.push(matrix[top][i]);
+        }
+        top++;
+
+        for (let i = top; i <= bottom; i++) {
+            order.push(matrix[i][right]);
+        }
+        right--;
+
+        if (top <= bottom) {
+            for (let i = right; i >= left; i--) {
+                order.push(matrix[bottom][i]);
+            }
+            bottom--;
+        }
+
+        if (left <= right) {
+            for (let i = bottom; i >= top; i--) {
+                order.push(matrix[i][left]);
+            }
+            left++;
+        }
+    }
+
+    return order;
+};
