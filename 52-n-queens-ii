@@ -1,0 +1,36 @@
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var totalNQueens = function (n) {
+    let col = new Array(n).fill(false);
+    let posDiag = new Array(2 * n - 1).fill(false); 
+    let negDiag = new Array(2 * n - 1).fill(false); 
+    let board = new Array(n).fill().map(() => new Array(n).fill('.'));
+    let res = 0;
+
+    function backtrack(r) {
+        if (r === n) {
+            res += 1;
+            return;
+        }
+
+        for (let c = 0; c < n; c++) {
+            if (col[c] || posDiag[r + c] || negDiag[r - c + n - 1]) {
+                continue;
+            }
+
+            col[c] = true;
+            posDiag[r + c] = true;
+            negDiag[r - c + n - 1] = true;
+
+            backtrack(r + 1);
+
+            col[c] = false;
+            posDiag[r + c] = false;
+            negDiag[r - c + n - 1] = false;
+        }
+    }
+    backtrack(0);
+    return res;
+};
