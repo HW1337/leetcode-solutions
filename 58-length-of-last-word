@@ -1,0 +1,22 @@
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLastWord = function(s) {
+    let len = 0;
+    let lastNonSpaceIndex = s.length - 1;
+
+    while (lastNonSpaceIndex >= 0 && s[lastNonSpaceIndex] === ' ') {
+        lastNonSpaceIndex--;
+    }
+
+    for (let i = lastNonSpaceIndex; i >= 0; i--) {
+        if (s[i] !== ' ') {
+            len++;
+        } else {
+            break;
+        }
+    }
+
+    return len;
+};
