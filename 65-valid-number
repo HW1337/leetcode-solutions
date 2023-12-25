@@ -30,6 +30,8 @@ const isNumber = (s) => {
       type = 'sign';
     } else if (str === ' ') {
       type = 'blank';
+    } else if (str.toLowerCase() === 'e') {
+      type = 'e';
     } else {
       type = str;
     }
