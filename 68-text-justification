@@ -1,0 +1,53 @@
+/**
+ * @param {string[]} words
+ * @param {number} maxWidth
+ * @return {string[]}
+ */
+const fullJustify = (words, maxWidth) => {
+  const len = words.length;
+  let arr = [];
+  let width = 0;
+  let item = null;
+  let addLen = 0;
+  const res = [];
+
+  for (let i = 0; i < len; i++) {
+    item = words[i];
+    addLen = width === 0 ? item.length : item.length + 1;
+
+    if (width + addLen > maxWidth) {
+      res.push(helper(arr, maxWidth - width, false));
+      arr = [];
+      width = 0;
+      addLen = item.length;
+    }
+
+    arr.push(item);
+    width += addLen;
+  }
+
+  res.push(helper(arr, maxWidth - width, true));
+
+  return res;
+};
+
+const helper = (arr, left, isLast) => {
+  const len = arr.length;
+  let num = 0;
+  let rem = 0;
+  let result = '';
+
+  if (len === 1 || isLast) {
+    return arr.join(' ') + ' '.repeat(left);
+  }
+
+  num = Math.floor(left / (len - 1));
+  rem = left % (len - 1);
+  for (let i = 0; i < len; i++) {
+    result += arr[i];
+    if (i < len - 1) result += ' '.repeat(num + 1);
+    if (i < rem) result += ' ';
+  }
+
+  return result;
+};
