@@ -1,0 +1,41 @@
+/**
+ * @param {character[][]} board
+ * @param {string} word
+ * @return {boolean}
+ */
+var exist = function(board, word) {
+    for (let row = 0; row < board.length; row++) {
+        for (let col = 0; col < board[0].length; col++) {
+            if (dfs(board, row, col, word, 0, Array.from({ length: board.length }, () => Array(board[0].length).fill(false)))) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+const dfs = (board, row, col, word, index, visited) => {
+    if (index === word.length) return true;
+    if (isOutOfBound(board, row, col) || visited[row][col]) return false;
+    if (board[row][col] !== word[index]) return false;
+
+    visited[row][col] = true;
+
+    const directions = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+
+    for (const [dr, dc] of directions) {
+        const newRow = row + dr;
+        const newCol = col + dc;
+        if (dfs(board, newRow, newCol, word, index + 1, visited)) {
+            return true;
+        }
+    }
+
+    visited[row][col] = false;
+    return false;
+}
+
+const isOutOfBound = (board, row, col) => {
+    return row < 0 || row >= board.length || col < 0 || col >= board[0].length;
+}
