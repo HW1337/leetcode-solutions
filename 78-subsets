@@ -1,0 +1,22 @@
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var subsets = function(nums) {
+    nums.sort((a, b) => a - b);
+    const result = [];
+
+    const dfs = (startIndex, currentSubset) => {
+        result.push(currentSubset.slice());
+
+        for (let i = startIndex; i < nums.length; i++) {
+            currentSubset.push(nums[i]);
+            dfs(i + 1, currentSubset);
+            currentSubset.pop();
+        }
+    };
+
+    dfs(0, []);
+
+    return result;
+};
