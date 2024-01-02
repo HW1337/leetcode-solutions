@@ -1,0 +1,53 @@
+/**
+ * @param {string} s1
+ * @param {string} s2
+ * @return {boolean}
+ */
+var isScramble = function(s1, s2) {
+    const helper = (str1, str2) => {
+        if (str1 === str2) {
+            return true;
+        }
+
+        const hashKey = str1 + '+' + str2;
+        if (memo.has(hashKey)) {
+            return memo.get(hashKey);
+        }
+
+        const count = Array(128).fill(0);
+
+        for (let i = 0; i < str1.length; ++i) {
+            ++count[str1.charCodeAt(i)];
+            --count[str2.charCodeAt(i)];
+        }
+
+        if (count.some(c => c !== 0)) {
+            memo.set(hashKey, false);
+            return false;
+        }
+
+        for (let i = 1; i < str1.length; ++i) {
+            if (
+                helper(str1.substring(0, i), str2.substring(0, i)) &&
+                helper(str1.substring(i), str2.substring(i))
+            ) {
+                memo.set(hashKey, true);
+                return true;
+            }
+
+            if (
+                helper(str1.substring(0, i), str2.substring(str2.length - i)) &&
+                helper(str1.substring(i), str2.substring(0, str2.length - i))
+            ) {
+                memo.set(hashKey, true);
+                return true;
+            }
+        }
+
+        memo.set(hashKey, false);
+        return false;
+    };
+
+    const memo = new Map();
+    return helper(s1, s2);
+};
