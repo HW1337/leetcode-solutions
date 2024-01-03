@@ -1,0 +1,31 @@
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var subsetsWithDup = function(nums) {
+    nums.sort((a, b) => a - b);
+
+    return subsets(nums);
+};
+
+const subsets = (nums) => {
+    const result = [[]];
+    let startIndex = 0;
+
+    for (let i = 0; i < nums.length; i++) {
+        const isDuplicate = (i > 0 && nums[i] === nums[i - 1]);
+        const currentSize = result.length;
+
+        startIndex = isDuplicate ? startIndex : 0;
+
+        for (let j = startIndex; j < currentSize; j++) {
+            const subset = result[j].slice();
+            subset.push(nums[i]);
+            result.push(subset);
+        }
+
+        startIndex = currentSize;
+    }
+
+    return result;
+};
