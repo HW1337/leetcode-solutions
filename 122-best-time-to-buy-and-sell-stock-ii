@@ -1,0 +1,20 @@
+/**
+ * @param {number[]} prices
+ * @return {number}
+ */
+var maxProfit = prices => {
+    const n = prices.length;
+
+    let dpHold = -prices[0]; 
+    let dpNotHold = 0;     
+
+    for (let i = 1; i < n; i++) {
+        const newHold = Math.max(dpHold, dpNotHold - prices[i]);
+        const newNotHold = Math.max(dpNotHold, dpHold + prices[i]);
+
+        dpHold = newHold;
+        dpNotHold = newNotHold;
+    }
+
+    return Math.max(dpHold, dpNotHold);
+};
