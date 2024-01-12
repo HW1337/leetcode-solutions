@@ -1,0 +1,31 @@
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+const maxPathSum = function(root) {
+    const result = { maxSum: -Infinity };
+
+    const getMaxSum = (node) => {
+        if (!node) return 0;
+
+        const leftMax = Math.max(0, getMaxSum(node.left));
+        const rightMax = Math.max(0, getMaxSum(node.right));
+
+        const currentSum = leftMax + rightMax + node.val;
+        result.maxSum = Math.max(result.maxSum, currentSum);
+
+        return Math.max(leftMax, rightMax) + node.val;
+    };
+
+    getMaxSum(root);
+
+    return result.maxSum;
+};
