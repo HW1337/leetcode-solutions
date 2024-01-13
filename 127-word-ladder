@@ -1,0 +1,44 @@
+/**
+ * @param {string} beginWord
+ * @param {string} endWord
+ * @param {string[]} wordList
+ * @return {number}
+ */
+var ladderLength = function(beginWord, endWord, wordList) {
+    const queue = [ [beginWord, 1] ];
+    const wordSet = new Set(wordList);
+    const seen = new Set([beginWord]);
+
+    return bfs(queue, wordSet, seen, endWord);
+};
+
+const bfs = (queue, wordSet, seen, endWord) => {
+    while (queue.length > 0) {
+        const [word, depth] = queue.shift();
+
+        if (word === endWord) return depth;
+
+        transform(queue, wordSet, seen, word, depth);
+    }
+
+    return 0;
+};
+
+const transform = (queue, wordSet, seen, word, depth) => {
+    for (let i = 0; i < word.length; i++) {
+        for (const char of 'abcdefghijklmnopqrstuvwxyz') {
+            const neighbor = getNeighbor(word, i, char);
+
+            if (!wordSet.has(neighbor) || seen.has(neighbor)) continue;
+
+            queue.push([neighbor, depth + 1]);
+            seen.add(neighbor);
+        }
+    }
+};
+
+const getNeighbor = (word, index, char) => {
+    const neighbor = word.split('');
+    neighbor[index] = char;
+    return neighbor.join('');
+};
