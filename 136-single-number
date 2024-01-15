@@ -1,0 +1,17 @@
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var singleNumber = function(nums) {
+    const frequencyMap = {};
+
+    for (const num of nums) {
+        frequencyMap[num] = (frequencyMap[num] || 0) + 1;
+    }
+
+    for (const num in frequencyMap) {
+        if (frequencyMap[num] === 1) {
+            return parseInt(num);
+        }
+    }
+};
