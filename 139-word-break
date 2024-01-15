@@ -1,0 +1,41 @@
+/**
+ * @param {string} s
+ * @param {string[]} wordDict
+ * @return {boolean}
+ */
+var wordBreak = function(s, wordDict) {
+    const wordSet = new Set(wordDict);           
+    const stack = [0];                          
+    const seen = new Array(s.length).fill(false);
+
+    return dfs(stack, s, wordSet, seen);        
+}
+
+const dfs = (stack, s, wordSet, seen) => {
+    while (stack.length > 0) {
+        const start = stack.pop();
+
+        const hasSeen = seen[start];
+        if (hasSeen) continue;
+
+        if (canBreak(stack, s, start, wordSet)) return true;
+        seen[start] = true;                                 
+    }
+
+    return false;
+}
+
+var canBreak = (stack, s, start, wordSet) => {
+    for (let end = start + 1; end <= s.length; end++) {
+        const word = s.slice(start, end);                  
+
+        if (!wordSet.has(word)) continue;
+
+        stack.push(end);                                    
+
+        const _canBreak = end === s.length;
+        if (_canBreak) return true;
+    }
+
+    return false
+}
