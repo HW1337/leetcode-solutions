@@ -1,0 +1,36 @@
+/**
+ * @param {string} s
+ * @param {string[]} wordDict
+ * @return {string[]}
+ */
+var wordBreak = function(s, wordDict) {
+    const wordSet = new Set(wordDict);
+    const memo = new Map();
+
+    const backtrack = (start) => {
+        if (start === s.length) {
+            return [''];
+        }
+
+        if (memo.has(start)) {
+            return memo.get(start);
+        }
+
+        const sentences = [];
+
+        for (let end = start + 1; end <= s.length; end++) {
+            const word = s.substring(start, end);
+            if (wordSet.has(word)) {
+                const nextSentences = backtrack(end);
+                for (const nextSentence of nextSentences) {
+                    sentences.push(nextSentence ? `${word} ${nextSentence}` : word);
+                }
+            }
+        }
+
+        memo.set(start, sentences);
+        return sentences;
+    };
+
+    return backtrack(0);
+};
