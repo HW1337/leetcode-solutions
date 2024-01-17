@@ -1,0 +1,40 @@
+/** 
+ * Your LRUCache object will be instantiated and called as such:
+ * var obj = new LRUCache(capacity)
+ * var param_1 = obj.get(key)
+ * obj.put(key,value)
+ */
+ class LRUCache {
+    constructor(capacity) {
+        this.capacity = capacity;
+        this.cache = new Map();
+        this.order = [];
+    }
+
+    get(key) {
+        if (this.cache.has(key)) {
+            const index = this.order.indexOf(key);
+            this.order.splice(index, 1);
+            this.order.push(key);
+            return this.cache.get(key);
+        } else {
+            return -1;
+        }
+    }
+
+    put(key, value) {
+        if (this.cache.has(key)) {
+            this.cache.set(key, value);
+            const index = this.order.indexOf(key);
+            this.order.splice(index, 1);
+            this.order.push(key);
+        } else {
+            if (this.cache.size >= this.capacity) {
+                const lruKey = this.order.shift();
+                this.cache.delete(lruKey);
+            }
+            this.cache.set(key, value);
+            this.order.push(key);
+        }
+    }
+}
