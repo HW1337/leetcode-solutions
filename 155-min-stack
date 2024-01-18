@@ -1,0 +1,41 @@
+class MinStack {
+    constructor () {
+        this.head = null;
+        this.min = null;
+    }
+
+    push (val) {
+        if (!this.head) {
+            this.head = new Node(val, null);
+            this.min = val;
+        } else {
+            const newNode = new Node(val, this.min);
+            this.min = Math.min(val, this.min);
+            newNode.next = this.head;
+            this.head = newNode;
+        }
+    }
+
+    pop () {
+        if (this.head) {
+            this.min = this.head.min;
+            this.head = this.head.next;
+        }
+    }
+
+    top () {
+        return this.head ? this.head.val : null;
+    }
+
+    getMin () {
+        return this.min;
+    }
+}
+
+class Node {
+    constructor (val, min, next) {
+        this.val = val;
+        this.min = min;
+        this.next = next;
+    }
+}
