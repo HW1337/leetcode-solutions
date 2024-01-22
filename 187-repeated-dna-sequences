@@ -1,0 +1,20 @@
+/**
+ * @param {string} s
+ * @return {string[]}
+ */
+var findRepeatedDnaSequences = function(s) {
+const sequenceSet = new Set();
+    const resultSet = new Set();
+
+    for (let i = 0; i <= s.length - 10; i++) {
+        const subSequence = s.substring(i, i + 10);
+
+        if (sequenceSet.has(subSequence)) {
+            resultSet.add(subSequence);
+        } else {
+            sequenceSet.add(subSequence);
+        }
+    }
+
+    return Array.from(resultSet);
+}
