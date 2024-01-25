@@ -1,0 +1,62 @@
+/**
+ * @param {character[][]} grid
+ * @return {number}
+ */
+var numIslands = function(grid) {
+    if (!grid || grid.length === 0 || grid[0].length === 0) {
+        return 0;
+    }
+
+    const rows = grid.length;
+    const cols = grid[0].length;
+    let count = 0;
+    const parent = new Array(rows * cols);
+    const rank = new Array(rows * cols);
+
+    const find = (x) => {
+        if (parent[x] !== x) {
+            parent[x] = find(parent[x]);
+        }
+        return parent[x];
+    };
+
+    const union = (x, y) => {
+        const rootX = find(x);
+        const rootY = find(y);
+
+        if (rootX !== rootY) {
+            if (rank[rootX] > rank[rootY]) {
+                parent[rootY] = rootX;
+            } else if (rank[rootX] < rank[rootY]) {
+                parent[rootX] = rootY;
+            } else {
+                parent[rootY] = rootX;
+                rank[rootX]++;
+            }
+            count--;
+        }
+    };
+
+    for (let i = 0; i < rows * cols; i++) {
+        parent[i] = i;
+        rank[i] = 0;
+    }
+
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            if (grid[i][j] === '1') {
+                count++;
+
+                if (i > 0 && grid[i - 1][j] === '1') {
+                    union(i * cols + j, (i - 1) * cols + j);
+                }
+
+                if (j > 0 && grid[i][j - 1] === '1') {
+                    union(i * cols + j, i * cols + j - 1);
+                }
+            }
+        }
+    }
+
+    return count;
+};
