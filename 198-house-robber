@@ -1,0 +1,18 @@
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var rob = function(nums) {
+    const n = nums.length;
+    if (n === 0) return 0;
+
+    let [prevMax, currMax] = [0, 0];
+
+    for (const num of nums) {
+        const temp = currMax;
+        currMax = Math.max(currMax, prevMax + num);
+        prevMax = temp;
+    }
+
+    return currMax;
+};
