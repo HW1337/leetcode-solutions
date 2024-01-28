@@ -1,0 +1,29 @@
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var rob = function(nums) {
+    const n = nums.length;
+    
+    if (n === 0) return 0;
+    if (n === 1) return nums[0];
+    
+    function simpleRob(nums) {
+        let prevMax = 0;
+        let currMax = 0;
+        
+        for (const num of nums) {
+            const temp = currMax;
+            currMax = Math.max(prevMax + num, currMax);
+            prevMax = temp;
+        }
+        
+        return currMax;
+    }
+
+    const case1 = simpleRob(nums.slice(0, n - 1));
+
+    const case2 = simpleRob(nums.slice(1));
+
+    return Math.max(case1, case2);
+};
