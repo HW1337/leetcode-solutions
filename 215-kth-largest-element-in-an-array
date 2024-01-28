@@ -1,0 +1,96 @@
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number}
+ */
+var findKthLargest = function(nums, k) {
+    let heap = new MinHeap();
+
+    for (let i = 0; i < nums.length; i++) {
+        heap.insert(nums[i]);
+        if (heap.size() > k) {
+            heap.extractMin();
+        }
+    }
+
+    return heap.getMin();
+};
+
+class MinHeap {
+    constructor() {
+        this.heap = [];
+    }
+
+    insert(value) {
+        this.heap.push(value);
+        this.heapifyUp();
+    }
+
+    extractMin() {
+        if (this.size() === 0) {
+            return null;
+        }
+
+        const min = this.heap[0];
+        const last = this.heap.pop();
+
+        if (this.size() > 0) {
+            this.heap[0] = last;
+            this.heapifyDown();
+        }
+
+        return min;
+    }
+
+    getMin() {
+        return this.size() > 0 ? this.heap[0] : null;
+    }
+
+    size() {
+        return this.heap.length;
+    }
+
+    heapifyUp() {
+        let currentIdx = this.size() - 1;
+
+        while (currentIdx > 0) {
+            const parentIdx = Math.floor((currentIdx - 1) / 2);
+
+            if (this.heap[currentIdx] < this.heap[parentIdx]) {
+                this.swap(currentIdx, parentIdx);
+                currentIdx = parentIdx;
+            } else {
+                break;
+            }
+        }
+    }
+
+    heapifyDown() {
+        let currentIdx = 0;
+
+        while (true) {
+            const leftChildIdx = 2 * currentIdx + 1;
+            const rightChildIdx = 2 * currentIdx + 2;
+            let smallestChildIdx = currentIdx;
+
+            if (leftChildIdx < this.size() && this.heap[leftChildIdx] < this.heap[smallestChildIdx]) {
+                smallestChildIdx = leftChildIdx;
+            }
+
+            if (rightChildIdx < this.size() && this.heap[rightChildIdx] < this.heap[smallestChildIdx]) {
+                smallestChildIdx = rightChildIdx;
+            }
+
+            if (smallestChildIdx !== currentIdx) {
+                this.swap(currentIdx, smallestChildIdx);
+                currentIdx = smallestChildIdx;
+            } else {
+                break;
+            }
+        }
+    }
+
+    swap(i, j) {
+        [this.heap[i], this.heap[j]] = [this.heap[j], this.heap[i]];
+    }
+}
