@@ -1,0 +1,26 @@
+/**
+ * @param {number} k
+ * @param {number} n
+ * @return {number[][]}
+ */
+var combinationSum3 = function(k, n) {
+    const result = [];
+
+    const backtrack = (start, target, current) => {
+        if (target === 0 && current.length === k) {
+            result.push([...current]);
+            return;
+        }
+
+        for (let i = start; i <= 9; i++) {
+            if (i > target) break;
+            current.push(i);
+            backtrack(i + 1, target - i, current);
+            current.pop();
+        }
+    };
+
+    backtrack(1, n, []);
+
+    return result;
+};
