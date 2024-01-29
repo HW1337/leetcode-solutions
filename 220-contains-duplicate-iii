@@ -1,0 +1,39 @@
+/**
+ * @param {number[]} nums
+ * @param {number} indexDiff
+ * @param {number} valueDiff
+ * @return {boolean}
+ */
+ var containsNearbyAlmostDuplicate = function(nums, indexDiff, valueDiff) {
+    const bucketMap = new Map();
+
+    const getBucket = (num) => {
+        return num < 0 ? Math.floor((num + 1) / (valueDiff + 1)) - 1 : Math.floor(num / (valueDiff + 1));
+    };
+
+    for (let i = 0; i < nums.length; i++) {
+        const num = nums[i];
+        const bucket = getBucket(num);
+
+        if (bucketMap.has(bucket) && Math.abs(bucketMap.get(bucket) - num) <= valueDiff) {
+            return true;
+        }
+
+        if (bucketMap.has(bucket - 1) && Math.abs(bucketMap.get(bucket - 1) - num) <= valueDiff) {
+            return true;
+        }
+
+        if (bucketMap.has(bucket + 1) && Math.abs(bucketMap.get(bucket + 1) - num) <= valueDiff) {
+            return true;
+        }
+
+        bucketMap.set(bucket, num);
+
+        if (i >= indexDiff) {
+            const outdatedBucket = getBucket(nums[i - indexDiff]);
+            bucketMap.delete(outdatedBucket);
+        }
+    }
+
+    return false;
+};
