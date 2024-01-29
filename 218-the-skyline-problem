@@ -1,0 +1,83 @@
+/**
+ * @param {number[][]} buildings
+ * @return {number[][]}
+ */
+var getSkyline = function(buildings) {
+    const events = [];
+    for (const [left, right, height] of buildings) {
+        events.push([left, height, true]);
+        events.push([right, height, false]);
+    }
+    events.sort((a, b) => a[0] !== b[0] ? a[0] - b[0] : (a[2] ? -a[1] : a[1]) - (b[2] ? -b[1] : b[1]));
+
+    const result = [];
+    const maxHeap = new MaxHeap();
+    maxHeap.insert(0);
+
+    for (const [x, h, isStart] of events) {
+        if (isStart) {
+            if (h > maxHeap.peek()) {
+                result.push([x, h]);
+            }
+            maxHeap.insert(h);
+        } else {
+            maxHeap.remove(h);
+            if (h > maxHeap.peek()) {
+                result.push([x, maxHeap.peek()]);
+            }
+        }
+    }
+
+    return result;
+};
+
+class MaxHeap {
+    constructor() {
+        this.heap = [0];
+    }
+
+    insert(value) {
+        this.heap.push(value);
+        this.heapifyUp();
+    }
+
+    remove(value) {
+        const index = this.heap.indexOf(value);
+        if (index !== -1) {
+            this.heap[index] = this.heap[this.heap.length - 1];
+            this.heap.pop();
+            this.heapifyDown(index);
+        }
+    }
+
+    heapifyUp() {
+        let current = this.heap.length - 1;
+        while (current > 1 && this.heap[current] > this.heap[Math.floor(current / 2)]) {
+            [this.heap[current], this.heap[Math.floor(current / 2)]] = [this.heap[Math.floor(current / 2)], this.heap[current]];
+            current = Math.floor(current / 2);
+        }
+    }
+
+    heapifyDown(index) {
+        let left = 2 * index;
+        let right = 2 * index + 1;
+        let largest = index;
+
+        if (left < this.heap.length && this.heap[left] > this.heap[largest]) {
+            largest = left;
+        }
+
+        if (right < this.heap.length && this.heap[right] > this.heap[largest]) {
+            largest = right;
+        }
+
+        if (largest !== index) {
+            [this.heap[index], this.heap[largest]] = [this.heap[largest], this.heap[index]];
+            this.heapifyDown(largest);
+        }
+    }
+
+    peek() {
+        return this.heap[1];
+    }
+}
