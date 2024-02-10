@@ -1,0 +1,20 @@
+/**
+ * @param {number[]} nums
+ * @return {number[]}
+ */
+var singleNumber = function(nums) {
+    let xor = 0;
+    for (const num of nums) {
+        xor ^= num;
+    }
+    const rightmostSetBit = xor & -xor;
+    let group1 = 0, group2 = 0;
+    for (const num of nums) {
+        if (num & rightmostSetBit) {
+            group1 ^= num;
+        } else {
+            group2 ^= num;
+        }
+    }
+    return [group1, group2];
+};
