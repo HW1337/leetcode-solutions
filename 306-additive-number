@@ -1,0 +1,25 @@
+/**
+ * @param {string} num
+ * @return {boolean}
+ */
+var isAdditiveNumber = function(num) {
+    const isAdditive = (num, first, second) => {
+        if (num.length === 0) return true;
+        for (let i = 1; i <= num.length; i++) {
+            const third = BigInt(num.slice(0, i));
+            if (third === first + second && !(num[0] === '0' && i > 1)) {
+                if (isAdditive(num.slice(i), second, third)) return true;
+            }
+        }
+        return false;
+    };
+
+    for (let i = 1; i <= num.length / 2; i++) {
+        for (let j = 1; Math.max(i, j) <= num.length - i - j; j++) {
+            const first = BigInt(num.slice(0, i));
+            const second = BigInt(num.slice(i, i + j));
+            if (!(num[0] === '0' && i > 1) && !(num[i] === '0' && j > 1) && isAdditive(num.slice(i + j), first, second)) return true;
+        }
+    }
+    return false;
+};
