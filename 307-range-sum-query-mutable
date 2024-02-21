@@ -1,0 +1,63 @@
+/**
+ * @param {number[]} nums
+ */
+var NumArray = function(nums) {
+    this.nums = nums;
+    this.tree = [];
+    this.buildTree(0, 0, nums.length - 1);
+};
+
+NumArray.prototype.buildTree = function(node, start, end) {
+    if (start === end) {
+        this.tree[node] = this.nums[start];
+    } else {
+        let mid = Math.floor((start + end) / 2);
+        this.buildTree(2 * node + 1, start, mid);
+        this.buildTree(2 * node + 2, mid + 1, end);
+        this.tree[node] = this.tree[2 * node + 1] + this.tree[2 * node + 2];
+    }
+};
+
+/** 
+ * @param {number} index 
+ * @param {number} val
+ * @return {void}
+ */
+NumArray.prototype.update = function(index, val) {
+    let diff = val - this.nums[index];
+    this.nums[index] = val;
+    this.updateTree(0, 0, this.nums.length - 1, index, diff);
+};
+
+NumArray.prototype.updateTree = function(node, start, end, index, diff) {
+    if (index < start || index > end) return;
+    this.tree[node] += diff;
+    if (start !== end) {
+        let mid = Math.floor((start + end) / 2);
+        this.updateTree(2 * node + 1, start, mid, index, diff);
+        this.updateTree(2 * node + 2, mid + 1, end, index, diff);
+    }
+};
+
+/** 
+ * @param {number} left 
+ * @param {number} right
+ * @return {number}
+ */
+NumArray.prototype.sumRange = function(left, right) {
+    return this.queryTree(0, 0, this.nums.length - 1, left, right);
+};
+
+NumArray.prototype.queryTree = function(node, start, end, left, right) {
+    if (right < start || left > end) return 0;
+    if (left <= start && right >= end) return this.tree[node];
+    let mid = Math.floor((start + end) / 2);
+    return this.queryTree(2 * node + 1, start, mid, left, right) + this.queryTree(2 * node + 2, mid + 1, end, left, right);
+};
+
+/** 
+ * Your NumArray object will be instantiated and called as such:
+ * var obj = new NumArray(nums)
+ * obj.update(index,val)
+ * var param_2 = obj.sumRange(left,right)
+ */
