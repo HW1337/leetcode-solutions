@@ -1,0 +1,41 @@
+/**
+ * @param {number} n
+ * @param {number[][]} edges
+ * @return {number[]}
+ */
+var findMinHeightTrees = function(n, edges) {
+    if (n === 1) return [0];
+    
+    const adjList = new Array(n).fill(0).map(() => []);
+    const degrees = new Array(n).fill(0);
+    
+    for (const [u, v] of edges) {
+        adjList[u].push(v);
+        adjList[v].push(u);
+        degrees[u]++;
+        degrees[v]++;
+    }
+    
+    const queue = [];
+    for (let i = 0; i < n; i++) {
+        if (degrees[i] === 1) {
+            queue.push(i);
+        }
+    }
+    
+    let remainingNodes = n;
+    while (remainingNodes > 2) {
+        const levelSize = queue.length;
+        remainingNodes -= levelSize;
+        for (let i = 0; i < levelSize; i++) {
+            const node = queue.shift();
+            for (const neighbor of adjList[node]) {
+                if (--degrees[neighbor] === 1) {
+                    queue.push(neighbor);
+                }
+            }
+        }
+    }
+    
+    return queue;
+};
