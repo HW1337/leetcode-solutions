@@ -1,0 +1,26 @@
+/**
+ * @param {string[]} words
+ * @return {number}
+ */
+var maxProduct = function(words) {
+    let max = 0;
+    const wordBits = new Array(words.length);
+    
+    for (let i = 0; i < words.length; i++) {
+        let bits = 0;
+        for (let j = 0; j < words[i].length; j++) {
+            bits |= 1 << (words[i].charCodeAt(j) - 97);
+        }
+        wordBits[i] = bits;
+    }
+    
+    for (let i = 0; i < words.length - 1; i++) {
+        for (let j = i + 1; j < words.length; j++) {
+            if ((wordBits[i] & wordBits[j]) === 0) {
+                max = Math.max(max, words[i].length * words[j].length);
+            }
+        }
+    }
+    
+    return max;
+};
