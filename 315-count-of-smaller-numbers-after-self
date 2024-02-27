@@ -1,0 +1,54 @@
+/**
+ * @param {number[]} nums
+ * @return {number[]}
+ */
+var countSmaller = function(nums) {
+    const n = nums.length;
+    const counts = new Array(n).fill(0);
+    const indexedNums = nums.map((num, index) => ({ num, index }));
+
+    mergeSort(indexedNums, 0, n - 1);
+    return counts;
+
+    function mergeSort(arr, left, right) {
+        if (left >= right) return;
+        const mid = Math.floor((left + right) / 2);
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+        merge(arr, left, mid, right);
+    }
+
+    function merge(arr, left, mid, right) {
+        const merged = [];
+        let i = left;
+        let j = mid + 1;
+        let rightCount = 0;
+
+        while (i <= mid && j <= right) {
+            if (arr[i].num > arr[j].num) {
+                merged.push(arr[j]);
+                rightCount++;
+                j++;
+            } else {
+                counts[arr[i].index] += rightCount;
+                merged.push(arr[i]);
+                i++;
+            }
+        }
+
+        while (i <= mid) {
+            counts[arr[i].index] += rightCount;
+            merged.push(arr[i]);
+            i++;
+        }
+
+        while (j <= right) {
+            merged.push(arr[j]);
+            j++;
+        }
+
+        for (let k = 0; k < merged.length; k++) {
+            arr[left + k] = merged[k];
+        }
+    }
+};
