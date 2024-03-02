@@ -1,0 +1,17 @@
+/**
+ * @param {number[]} nums
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+var wiggleSort = function(nums) {
+    nums.sort((a, b) => a - b);
+    const mid = Math.floor((nums.length + 1) / 2);
+    const firstHalf = nums.slice(0, mid);
+    const secondHalf = nums.slice(mid);
+    for (let i = 0; i < nums.length; i++) {
+        if (i % 2 === 0) {
+            nums[i] = firstHalf.pop();
+        } else {
+            nums[i] = secondHalf.pop();
+        }
+    }
+};
