@@ -1,0 +1,22 @@
+/**
+ * @param {number[]} nums
+ * @param {number} n
+ * @return {number}
+ */
+var minPatches = function(nums, n) {
+    let patches = 0;
+    let i = 0;
+    let covered = 0;
+    
+    while (covered < n) {
+        if (i < nums.length && nums[i] <= covered + 1) {
+            covered += nums[i];
+            i++;
+        } else {
+            covered += covered + 1;
+            patches++;
+        }
+    }
+    
+    return patches;
+};
