@@ -1,0 +1,41 @@
+/**
+ * @param {string[]} words
+ * @return {number[][]}
+ */
+var palindromePairs = function(words) {
+    const isPalindrome = str => {
+        let left = 0, right = str.length - 1;
+        while (left < right) {
+            if (str[left++] !== str[right--]) return false;
+        }
+        return true;
+    };
+
+    const map = new Map();
+    const result = [];
+
+    words.forEach((word, index) => map.set(word, index));
+
+    words.forEach((word, index) => {
+        for (let i = 0; i <= word.length; i++) {
+            const prefix = word.substring(0, i);
+            const suffix = word.substring(i);
+
+            if (isPalindrome(prefix)) {
+                const reversedSuffix = suffix.split('').reverse().join('');
+                if (map.has(reversedSuffix) && map.get(reversedSuffix) !== index) {
+                    result.push([map.get(reversedSuffix), index]);
+                }
+            }
+
+            if (isPalindrome(suffix)) {
+                const reversedPrefix = prefix.split('').reverse().join('');
+                if (map.has(reversedPrefix) && map.get(reversedPrefix) !== index && suffix !== '') {
+                    result.push([index, map.get(reversedPrefix)]);
+                }
+            }
+        }
+    });
+
+    return result;
+};
