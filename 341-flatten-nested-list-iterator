@@ -1,0 +1,23 @@
+function NestedIterator(nestedList) {
+    this.stack = [];
+    this.flatten(nestedList);
+}
+
+NestedIterator.prototype.flatten = function(nestedList) {
+    for (let i = nestedList.length - 1; i >= 0; i--) {
+        const item = nestedList[i];
+        if (item.isInteger()) {
+            this.stack.push(item.getInteger());
+        } else {
+            this.flatten(item.getList());
+        }
+    }
+};
+
+NestedIterator.prototype.hasNext = function() {
+    return this.stack.length > 0;
+};
+
+NestedIterator.prototype.next = function() {
+    return this.stack.pop();
+};
