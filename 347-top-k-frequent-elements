@@ -1,0 +1,22 @@
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number[]}
+ */
+var topKFrequent = function(nums, k) {
+    const frequencyMap = new Map();
+    nums.forEach(num => frequencyMap.set(num, (frequencyMap.get(num) || 0) + 1));
+    
+    const buckets = [];
+    frequencyMap.forEach((value, key) => {
+        if (!buckets[value]) buckets[value] = [];
+        buckets[value].push(key);
+    });
+    
+    const result = [];
+    for (let i = buckets.length - 1; i >= 0 && result.length < k; i--) {
+        if (buckets[i]) result.push(...buckets[i]);
+    }
+    
+    return result;
+};
