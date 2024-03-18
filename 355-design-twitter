@@ -1,0 +1,41 @@
+var Twitter = function() {
+    this.tweets = new Map();
+    this.followees = new Map();
+    this.timestamp = 0;
+};
+
+Twitter.prototype.postTweet = function(userId, tweetId) {
+    if (!this.tweets.has(userId)) {
+        this.tweets.set(userId, []);
+    }
+    this.tweets.get(userId).unshift({ tweetId, timestamp: this.timestamp++ });
+};
+
+Twitter.prototype.getNewsFeed = function(userId) {
+    const feed = [];
+    if (this.tweets.has(userId)) {
+        feed.push(...this.tweets.get(userId));
+    }
+    if (this.followees.has(userId)) {
+        for (const followeeId of this.followees.get(userId)) {
+            if (this.tweets.has(followeeId)) {
+                feed.push(...this.tweets.get(followeeId));
+            }
+        }
+    }
+    feed.sort((a, b) => b.timestamp - a.timestamp);
+    return feed.slice(0, 10).map(tweet => tweet.tweetId);
+};
+
+Twitter.prototype.follow = function(followerId, followeeId) {
+    if (!this.followees.has(followerId)) {
+        this.followees.set(followerId, new Set());
+    }
+    this.followees.get(followerId).add(followeeId);
+};
+
+Twitter.prototype.unfollow = function(followerId, followeeId) {
+    if (this.followees.has(followerId)) {
+        this.followees.get(followerId).delete(followeeId);
+    }
+};
