@@ -1,0 +1,43 @@
+/**
+ * @param {number[][]} matrix
+ * @param {number} k
+ * @return {number}
+ */
+var maxSumSubmatrix = function(matrix, k) {
+    const rows = matrix.length, cols = matrix[0].length;
+    let maxSum = -Infinity;
+
+    for (let left = 0; left < cols; left++) {
+        const rowSum = new Array(rows).fill(0);
+
+        for (let right = left; right < cols; right++) {
+            for (let i = 0; i < rows; i++) {
+                rowSum[i] += matrix[i][right];
+            }
+            
+            let maxSubSum = -Infinity, sum = 0;
+
+            for (let i = 0; i < rows; i++) {
+                sum = Math.max(rowSum[i], sum + rowSum[i]);
+                maxSubSum = Math.max(maxSubSum, sum);
+            }
+
+            if (maxSubSum <= k) {
+                maxSum = Math.max(maxSum, maxSubSum);
+                continue;
+            }
+
+            for (let i = 0; i < rows; i++) {
+                let currSum = 0;
+                for (let j = i; j < rows; j++) {
+                    currSum += rowSum[j];
+                    if (currSum <= k) {
+                        maxSum = Math.max(maxSum, currSum);
+                    }
+                }
+            }
+        }
+    }
+
+    return maxSum;
+};
