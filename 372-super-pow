@@ -1,0 +1,28 @@
+/**
+ * @param {number} a
+ * @param {number[]} b
+ * @return {number}
+ */
+var superPow = function(a, b) {
+    let result = 1;
+    const mod = 1337;
+    a = a % mod;
+    for (let i = 0; i < b.length; i++) {
+        result = (pow(result, 10) * pow(a, b[i])) % mod;
+    }
+    return result;
+};
+
+function pow(x, n) {
+    if (n === 0) return 1;
+    x = x % 1337;
+    let ans = 1;
+    for (let i = 0; i < n; i++) {
+        ans = (ans * x) % 1337;
+    }
+    return ans;
+}
+
+
+
+
