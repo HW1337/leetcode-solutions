@@ -1,0 +1,80 @@
+/**
+ * @param {number[]} nums1
+ * @param {number[]} nums2
+ * @param {number} k
+ * @return {number[][]}
+ */
+var kSmallestPairs = function(nums1, nums2, k) {
+    const result = [];
+    const heap = new Heap((a, b) => a[0] + a[1] - b[0] - b[1]);
+    if (nums1.length === 0 || nums2.length === 0 || k === 0) return result;
+    
+    for (let i = 0; i < Math.min(nums1.length, k); i++) {
+        heap.insert([nums1[i], nums2[0], 0]);
+    }
+    
+    while (k-- > 0 && heap.size() > 0) {
+        const pair = heap.remove();
+        result.push([pair[0], pair[1]]);
+        if (pair[2] === nums2.length - 1) continue;
+        heap.insert([pair[0], nums2[pair[2] + 1], pair[2] + 1]);
+    }
+    
+    return result;
+};
+
+class Heap {
+    constructor(compare) {
+        this.compare = compare;
+        this.heap = [];
+    }
+
+    insert(val) {
+        this.heap.push(val);
+        this.bubbleUp(this.heap.length - 1);
+    }
+
+    remove() {
+        const top = this.heap[0];
+        const bottom = this.heap.pop();
+        if (this.heap.length > 0) {
+            this.heap[0] = bottom;
+            this.bubbleDown(0);
+        }
+        return top;
+    }
+
+    size() {
+        return this.heap.length;
+    }
+
+    bubbleUp(index) {
+        while (index > 0) {
+            const parent = Math.floor((index + 1) / 2) - 1;
+            if (this.compare(this.heap[index], this.heap[parent]) < 0) {
+                [this.heap[parent], this.heap[index]] = [this.heap[index], this.heap[parent]];
+                index = parent;
+            } else {
+                break;
+            }
+        }
+    }
+
+    bubbleDown(index) {
+        while (true) {
+            const child1 = 2 * (index + 1) - 1;
+            const child2 = 2 * (index + 1);
+            let swapIndex = null;
+            if (child1 < this.heap.length && this.compare(this.heap[child1], this.heap[index]) < 0) {
+                swapIndex = child1;
+            }
+            if (child2 < this.heap.length && this.compare(this.heap[child2], this.heap[index]) < 0 &&
+                (!swapIndex || this.compare(this.heap[child2], this.heap[child1]) < 0)) {
+                swapIndex = child2;
+            }
+            if (swapIndex === null) break;
+            [this.heap[index], this.heap[swapIndex]] = [this.heap[swapIndex], this.heap[index]];
+            index = swapIndex;
+        }
+    }
+}
