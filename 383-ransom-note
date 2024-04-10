@@ -1,0 +1,16 @@
+/**
+ * @param {string} ransomNote
+ * @param {string} magazine
+ * @return {boolean}
+ */
+var canConstruct = function (ransomNote, magazine) {
+    let result = {}
+
+    magazine.split('').forEach((el) =>
+        result[el] = (result[el] || 0) + 1)
+    return ransomNote.split('').every((el) => {
+        if (!result[el]) return false;
+        result[el]--;
+        return true;
+    });
+};
