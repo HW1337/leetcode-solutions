@@ -1,0 +1,36 @@
+var RandomizedCollection = function() {
+    this.collection = [];
+    this.indexMap = new Map();
+};
+
+RandomizedCollection.prototype.insert = function(val) {
+    this.collection.push(val);
+    if (!this.indexMap.has(val)) {
+        this.indexMap.set(val, new Set());
+    }
+    this.indexMap.get(val).add(this.collection.length - 1);
+    return this.indexMap.get(val).size === 1;
+};
+
+RandomizedCollection.prototype.remove = function(val) {
+    if (!this.indexMap.has(val) || this.indexMap.get(val).size === 0) return false;
+    const indexToRemove = this.indexMap.get(val).values().next().value;
+    const lastIndex = this.collection.length - 1;
+    const lastVal = this.collection[lastIndex];
+    this.collection[indexToRemove] = lastVal;
+    this.indexMap.get(val).delete(indexToRemove);
+    this.indexMap.get(lastVal).delete(lastIndex);
+    if (indexToRemove !== lastIndex) {
+        this.indexMap.get(lastVal).add(indexToRemove);
+    }
+    if (this.indexMap.get(val).size === 0) {
+        this.indexMap.delete(val);
+    }
+    this.collection.pop();
+    return true;
+};
+
+RandomizedCollection.prototype.getRandom = function() {
+    const randomIndex = Math.floor(Math.random() * this.collection.length);
+    return this.collection[randomIndex];
+};
