@@ -1,0 +1,32 @@
+var deserialize = function(s) {
+    if (s[0] !== '[') return new NestedInteger(+s);
+    
+    var stack = [];
+    var current = null;
+    var start = 1;
+    
+    for (var i = 0; i < s.length; i++) {
+        if (s[i] === '[') {
+            if (current !== null) stack.push(current);
+            current = new NestedInteger();
+            start = i + 1;
+        } else if (s[i] === ']') {
+            var num = s.substring(start, i);
+            if (num !== '') current.add(new NestedInteger(+num));
+            if (stack.length !== 0) {
+                var parent = stack.pop();
+                parent.add(current);
+                current = parent;
+            }
+            start = i + 1;
+        } else if (s[i] === ',') {
+            if (s[i - 1] !== ']') {
+                var num = s.substring(start, i);
+                current.add(new NestedInteger(+num));
+            }
+            start = i + 1;
+        }
+    }
+    
+    return current;
+};
