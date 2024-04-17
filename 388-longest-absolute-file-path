@@ -1,0 +1,23 @@
+/**
+ * @param {string} input
+ * @return {number}
+ */
+var lengthLongestPath = function(input) {
+    let paths = input.split('\n');
+    let maxLen = 0;
+    let pathLengths = [];
+    pathLengths[0] = 0;
+    
+    for (let path of paths) {
+        let level = path.lastIndexOf('\t') + 1;
+        let len = path.length - level;
+        
+        if (path.includes('.')) {
+            maxLen = Math.max(maxLen, pathLengths[level] + len);
+        } else {
+            pathLengths[level + 1] = pathLengths[level] + len + 1;
+        }
+    }
+    
+    return maxLen;
+};
