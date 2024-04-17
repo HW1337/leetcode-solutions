@@ -1,0 +1,19 @@
+/**
+ * @param {number} n
+ * @return {number[]}
+ */
+var lexicalOrder = function(n) {
+    let result = [];
+    dfs(0);
+    return result;
+    
+    function dfs(prefix) {
+        if (prefix > n) return;
+        if (prefix > 0) result.push(prefix);
+        for (let i = 0; i <= 9; i++) {
+            if (prefix === 0 && i === 0) continue;
+            let next = prefix * 10 + i;
+            if (next <= n) dfs(next);
+        }
+    }
+};
