@@ -1,0 +1,28 @@
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var decodeString = function(s) {
+    const stack = [];
+    let currNum = 0;
+    let currStr = '';
+
+    for (const char of s) {
+        if (char === '[') {
+            stack.push(currStr);
+            stack.push(currNum);
+            currStr = '';
+            currNum = 0;
+        } else if (char === ']') {
+            const num = stack.pop();
+            const prevStr = stack.pop();
+            currStr = prevStr + currStr.repeat(num);
+        } else if (char >= '0' && char <= '9') {
+            currNum = currNum * 10 + parseInt(char);
+        } else {
+            currStr += char;
+        }
+    }
+
+    return currStr;
+};
