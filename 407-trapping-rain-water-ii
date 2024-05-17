@@ -1,0 +1,42 @@
+/**
+ * @param {number[][]} heightMap
+ * @return {number}
+ */
+var trapRainWater = function(heightMap) {
+    if (heightMap.length === 0 || heightMap[0].length === 0) return 0;
+    const m = heightMap.length, n = heightMap[0].length;
+    const visited = Array.from({ length: m }, () => Array(n).fill(false));
+    const heap = [];
+    const directions = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+    let water = 0;
+    
+    const addCell = (i, j, height) => {
+        heap.push([height, i, j]);
+        visited[i][j] = true;
+    };
+    
+    for (let i = 0; i < m; i++) {
+        addCell(i, 0, heightMap[i][0]);
+        addCell(i, n - 1, heightMap[i][n - 1]);
+    }
+    for (let j = 1; j < n - 1; j++) {
+        addCell(0, j, heightMap[0][j]);
+        addCell(m - 1, j, heightMap[m - 1][j]);
+    }
+    
+    heap.sort((a, b) => a[0] - b[0]);
+    
+    while (heap.length > 0) {
+        const [h, x, y] = heap.shift();
+        for (const [dx, dy] of directions) {
+            const nx = x + dx, ny = y + dy;
+            if (nx >= 0 && nx < m && ny >= 0 && ny < n && !visited[nx][ny]) {
+                water += Math.max(0, h - heightMap[nx][ny]);
+                addCell(nx, ny, Math.max(h, heightMap[nx][ny]));
+                heap.sort((a, b) => a[0] - b[0]);
+            }
+        }
+    }
+    
+    return water;
+};
