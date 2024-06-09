@@ -1,0 +1,32 @@
+/**
+ * @param {string} startGene
+ * @param {string} endGene
+ * @param {string[]} bank
+ * @return {number}
+ */
+var minMutation = function(startGene, endGene, bank) {
+    if (!bank.includes(endGene)) return -1;
+
+    let bankSet = new Set(bank);
+    let queue = [[startGene, 0]];
+    let chars = ['A', 'C', 'G', 'T'];
+
+    while (queue.length) {
+        let [current, steps] = queue.shift();
+        if (current === endGene) return steps;
+
+        for (let i = 0; i < current.length; i++) {
+            for (let char of chars) {
+                if (char !== current[i]) {
+                    let mutatedGene = current.slice(0, i) + char + current.slice(i + 1);
+                    if (bankSet.has(mutatedGene)) {
+                        queue.push([mutatedGene, steps + 1]);
+                        bankSet.delete(mutatedGene);
+                    }
+                }
+            }
+        }
+    }
+
+    return -1;
+};
