@@ -1,0 +1,14 @@
+var pathSum = function(root, targetSum) {
+    if (!root) return 0;
+    
+    function dfs(node, sum) {
+        if (!node) return 0;
+        sum -= node.val;
+        let count = sum === 0 ? 1 : 0;
+        count += dfs(node.left, sum);
+        count += dfs(node.right, sum);
+        return count;
+    }
+    
+    return dfs(root, targetSum) + pathSum(root.left, targetSum) + pathSum(root.right, targetSum);
+};
