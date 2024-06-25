@@ -1,0 +1,45 @@
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+
+/**
+ * Encodes a tree to a single string.
+ *
+ * @param {TreeNode} root
+ * @return {string}
+ */
+var serialize = function(root) {
+    return JSON.stringify(serializeHelper(root));
+};
+
+function serializeHelper(node) {
+    if (!node) return null;
+    return [node.val, serializeHelper(node.left), serializeHelper(node.right)];
+}
+
+/**
+ * Decodes your encoded data to tree.
+ *
+ * @param {string} data
+ * @return {TreeNode}
+ */
+var deserialize = function(data) {
+    return deserializeHelper(JSON.parse(data));
+};
+
+function deserializeHelper(data) {
+    if (!data) return null;
+    let node = new TreeNode(data[0]);
+    node.left = deserializeHelper(data[1]);
+    node.right = deserializeHelper(data[2]);
+    return node;
+}
+
+/**
+ * Your functions will be called as such:
+ * deserialize(serialize(root));
+ */
