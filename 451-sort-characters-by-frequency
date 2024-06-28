@@ -1,0 +1,15 @@
+var frequencySort = function(s) {
+    const freqMap = new Map();
+    for (let char of s) {
+        freqMap.set(char, freqMap.get(char) + 1 || 1);
+    }
+    
+    const sortedChars = Array.from(freqMap.keys()).sort((a, b) => freqMap.get(b) - freqMap.get(a));
+    
+    let result = '';
+    for (let char of sortedChars) {
+        result += char.repeat(freqMap.get(char));
+    }
+    
+    return result;
+};
