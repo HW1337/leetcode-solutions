@@ -1,0 +1,30 @@
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var circularArrayLoop = function(nums) {
+    const n = nums.length;
+    const nextIndex = (i) => ((i + nums[i]) % n + n) % n;
+
+    for (let i = 0; i < n; i++) {
+        if (nums[i] === 0) continue;
+
+        let slow = i, fast = nextIndex(i);
+        while (nums[fast] * nums[i] > 0 && nums[nextIndex(fast)] * nums[i] > 0) {
+            if (slow === fast) {
+                if (slow === nextIndex(slow)) break;
+                return true;
+            }
+            slow = nextIndex(slow);
+            fast = nextIndex(nextIndex(fast));
+        }
+
+        let marker = i;
+        while (nums[marker] * nums[i] > 0) {
+            let temp = nextIndex(marker);
+            nums[marker] = 0;
+            marker = temp;
+        }
+    }
+    return false;
+};
